@@ -1,0 +1,68 @@
+#!/bin/sh
+get_app_files()
+{
+	[ ! -d /mnt/flash/Server ] && mkdir /mnt/flash/Server
+
+	if [ -x /mnt/flash/mountnfs ];then
+		/mnt/flash/mountnfs
+		[ $? != 0 ] && rm -f /mnt/flash/Server/Ztest.sh
+	fi
+
+	if [ "$(/mnt/flash/Server/Ztest.sh)" = "AllDone" ];then
+		echo "Mount squashfs or nfs files done !"
+		touch /tmp/Server.squashfs
+		ln -sf /tmp/Server.squashfs /mnt/flash/Server.tar.xz
+		return 0
+	fi
+
+	if [ -e /mnt/flash/Server.tar.xz ];then
+		mkdir /tmp/Server
+		mount --bind /tmp/Server /mnt/flash/Server
+		time xz -cd /mnt/flash/Server.tar.xz | tar xf - -C /mnt/flash
+	elif [ -e /mnt/flash/Server.squashfs ];then
+		mount -t squashfs -o ro,loop /mnt/flash/Server.squashfs /mnt/flash/Server
+	else
+		echo "Flash is EMPTY, there is not a valid tar ball or a valid squashfs file !"
+		return 1
+	fi
+
+	if [ "$(/mnt/flash/Server/Ztest.sh)" = "AllDone" ];then
+		echo "Extract files from tar ball  or  Mount squashfs from file  DONE !"
+		return 0
+	else
+		echo "Extract files from tar ball  or  Mount squashfs from file  ERROR !"
+		return 1
+	fi
+}
+
+check_dir()
+{
+	cd /mnt/flash
+	if [ ! -e productinfo -o ! -e data -o ! -e databak ];then
+		if [ -d Server/databak ];then
+			cp Server/databak /mnt/flash/data -r
+			cp Server/databak /mnt/flash/databak -r
+			
+			for dir in productinfo data databak
+			do
+				[ ! -d $dir ] && mkdir $dir 2>/dev/null
+			done
+		fi
+	fi
+	cd -
+	return 0
+}
+
+pre_load()
+{
+	if [ $(df /mnt/flash/Server 2>/dev/null|grep -v Filesystem|awk '{print $2}') -lt 30720 ];then
+		mount -t tmpfs -o rw,remount,size=30m tmpfs /tmp
+	fi
+	if [ -x /mnt/flash/tmp/script/preRUN.sh ];then
+		/mnt/flash/tmp/script/preRUN.sh
+	fi
+}
+
+#pre_load
+get_app_files && check_dir
+

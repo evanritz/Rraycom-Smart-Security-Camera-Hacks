@@ -1,0 +1,60 @@
+#! /bin/sh
+#===========================================
+#mount ro fs and tmp fs.   2013.3.26
+#===========================================
+
+#========================================================
+# mount flash func.
+#========================================================
+mount_romfs()
+{
+	ROMFS=/mnt/flash/Server
+
+	if [ ! -d $ROMFS ]; then
+		echo 'mount param fs dir.'
+		mount -t jffs2 -o rw /dev/mtdblock3 /mnt/flash
+		#sleep 1
+	else
+		echo 'param fs already mounted.'
+		return 0
+	fi	
+
+	echo 'param fs mounted.'
+
+	return 0
+}
+
+
+#========================================================
+# mount Server func.
+#========================================================
+mount_apppart()
+{
+	APPFS=/mnt/flash/Server/LINUX
+
+	if [ ! -d $APPFS -a -e /dev/mtdblock4 ]; then
+		echo 'mount app fs.'
+		[ ! -d /mnt/flash/Server ] && mkdir /mnt/flash/Server
+		mount -o ro /dev/mtdblock4 /mnt/flash/Server
+		#sleep 1
+	else
+		echo 'app fs already mounted or need not be mounted.'
+		return 0
+	fi	
+
+
+	echo 'app fs mounted.'
+
+	return 0
+}
+
+
+mount_romfs
+
+mount_apppart
+
+
+exit 0
+
+
+

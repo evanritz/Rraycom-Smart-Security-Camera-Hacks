@@ -1,0 +1,25 @@
+#! /bin/sh
+
+/bin/mount -a
+
+echo "welcome to ipc"
+for initscript in /etc/init.d/S[0-9][0-9]*
+do
+	if [ -x $initscript ] ;
+	then
+		echo "[RCS]: $initscript"
+		$initscript
+	fi
+done
+
+[ -d /mnt/flash/productinfo ] || mkdir /mnt/flash/productinfo
+
+if [ "$(/mnt/flash/Server/Ztest.sh 2>/dev/null)" = "AllDone" ]
+then
+	/mnt/flash/Server/script/autorun.sh &
+else
+	/root/watchall &
+	sleep 5
+	killall softwdg hiapp webs syslogd sdk_app syslogd httpd 2>/dev/null
+fi
+

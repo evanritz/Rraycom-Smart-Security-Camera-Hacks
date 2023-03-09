@@ -1,0 +1,19 @@
+#!/bin/sh
+
+ipaddr=192.168.1.18
+gateway=192.168.1.1
+netmask=255.255.255.0
+
+if [ -f /mnt/flash/productinfo/macaddr.txt ]
+then
+	macaddr=$(awk '{print $2}' /mnt/flash/productinfo/macaddr.txt)
+	ifconfig eth0 hw ether ${macaddr}
+fi
+
+ifconfig eth0 ${ipaddr} netmask ${netmask}
+route add default gw ${gateway}
+ifconfig lo 127.0.0.1
+
+telnetd&
+
+hostname ipc

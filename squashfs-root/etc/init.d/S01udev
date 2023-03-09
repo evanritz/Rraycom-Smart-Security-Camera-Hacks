@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#mkdir /dev/pts
+#mount -t devpts devpts /dev/pts
+
+#mkdir -p /dev/.udev
+#udevd --daemon
+#udevadm trigger
+mkdir /var/run
+touch /var/run/utmp
+mkdir -p /var/lib/modules/3.10.14
+echo /sbin/mdev > /proc/sys/kernel/hotplug
+/sbin/mdev -s && echo "mdev is ok......"
+
