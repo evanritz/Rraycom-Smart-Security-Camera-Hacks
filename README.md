@@ -9,7 +9,7 @@ Model: C-S-ACS229-US
     - For now, its good enough as binwalk was able to extract the rootfs
     - root user MD5 password hash found!
         - **$1$EnVGPLqH$Jwh/FgaqrrHwHsmzHibnc1**
-    - googlefu has found the password, No cracking required!
+    - [googlefu](https://gist.github.com/gabonator/74cdd6ab4f733ff047356198c781f27d?permalink_comment_id=3452955#gistcomment-3452955) has found the password, No cracking required!
         - Username: **root**
         - Password: **hkipc2016**
-    
+    - Some symlinks are missing in ROM dump
