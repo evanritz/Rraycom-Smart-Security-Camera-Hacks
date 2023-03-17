@@ -29,3 +29,11 @@ Model: C-S-ACS229-US
     - Both have watchdogs placed on them
     - Both watchdogs restart the process, but dont cause the camera to reboot
         - Could attempt to fakeout the watchdogs
+ - 3/16/23: C and Go Test programs compiled and running on Camera
+    - Attempting to write a RTSP server in Go could prove challenging due to the cameras 8MB ROM
+        - Compressing the Go binary and uncompressing into memory and executing could work
+    - Watchdog for hiapp and sdk_app found at /mnt/flash/Server/LINUX/**softwdg**
+        - After the watchdog is killed, the watchall, hiapp, and sdk_app binares can be killed without triggering a restart of the programs or reboot on the camera
+    - More analysis is needed to understand how to read from the video, audio, and GPIO devices
+        - Looking through strings command output of hiapp, sdk_app, and the custom kernel modules looks promising
+        
