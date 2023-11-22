@@ -1,4 +1,4 @@
-# Rraycom-Smart-Secuirty-Camera
+# Rraycom-Smart-Security-Camera
 
 Model: C-S-ACS229-US
 
@@ -36,4 +36,16 @@ Model: C-S-ACS229-US
         - After the watchdog is killed, the watchall, hiapp, and sdk_app binares can be killed without triggering a restart of the programs or reboot on the camera
     - More analysis is needed to understand how to read from the video, audio, and GPIO devices
         - Looking through strings command output of hiapp, sdk_app, and the custom kernel modules looks promising
-        
+
+ - 11/21/23: Picking this project back up
+	- After some messing around with Ghidra and decompling the hiapp and sdk_app I have some knowledge of the camera/mic/speaker/GPIO pins work
+	- Goal is to develop a RTSP server for the camera and a web interface to control the camera in go/c (hopefully go)
+	- Currently the camera can be kept alive from the watchdog, by writing to /dev/watchdog atleast every second
+		- Run **pet_watchdog.sh** for now
+	- hiapp uses the Tuya IoTOS embedded SDK
+		- Unsure of the tuya repo, but googlefu linked me back to this
+			- [API Reference](https://github.com/openshwprojects/OpenBK7231N/tree/master)
+	- sdk_app uses the ISVP-SDK from the Ingenic Smart Video Platform SDK
+		- [API Reference](https://jmichault.github.io/ipcam-100-dok/en/includes.en/html/index.htmlr)
+	- GDBServer working for camera can be [here](https://github.com/stayliv3/gdb-static-cross/tree/master/prebuilt)
+		- **gdbserver-7.7.1-mipsel-ii-v1**

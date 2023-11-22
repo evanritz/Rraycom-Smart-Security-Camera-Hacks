@@ -1,0 +1,13 @@
+# Nmap 7.80 scan initiated Wed Nov 15 19:22:35 2023 as: nmap -p- -oN full-port-scan 192.168.0.250
+Nmap scan report for 192.168.0.250
+Host is up (0.0025s latency).
+Not shown: 65529 closed ports
+PORT      STATE SERVICE
+23/tcp    open  telnet
+90/tcp    open  dnsix
+6668/tcp  open  irc
+8088/tcp  open  radan-http
+10081/tcp open  famdc
+20203/tcp open  unknown
+
+# Nmap done at Wed Nov 15 19:22:40 2023 -- 1 IP address (1 host up) scanned in 4.40 seconds
